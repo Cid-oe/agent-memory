@@ -85,3 +85,23 @@ jobs:
           NEO4J_PASSWORD: agent-memory-ci-only
           NEO4J_TEST_ALLOW_WRITE: "1"
         run: cargo test --all-features --test neo4j_integration -- --ignored
+
+  test-offline-multi-os:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ runner.os }}-offline
+
+      - name: Run tests (default features, offline core)
+        run: cargo test
+
+      - name: Run documented offline examples
+        run: |
+          cargo run --example quickstart
+          cargo run --example fact_history

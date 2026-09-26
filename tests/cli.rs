@@ -4,7 +4,7 @@ use std::process::Command;
 fn help_command_does_not_require_existing_db_path() {
     let exe = env!("CARGO_BIN_EXE_agent-memory");
     let output = Command::new(exe)
-        .args(["--db", "/tmp/agent-memory-does-not-exist.db", "help"])
+        .args(["--db", std::env::temp_dir().join("agent-memory-does-not-exist.db").to_str().unwrap(), "help"])
         .output()
         .unwrap();
 
@@ -20,7 +20,7 @@ fn help_command_does_not_require_existing_db_path() {
 fn version_command_reports_package_version() {
     let exe = env!("CARGO_BIN_EXE_agent-memory");
     let output = Command::new(exe)
-        .args(["--db", "/tmp/agent-memory-does-not-exist.db", "version"])
+        .args(["--db", std::env::temp_dir().join("agent-memory-does-not-exist.db").to_str().unwrap(), "version"])
         .output()
         .unwrap();
 
